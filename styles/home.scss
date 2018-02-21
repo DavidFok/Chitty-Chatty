@@ -1,3 +1,99 @@
-h1 {
-  color: tomato;
+
+body {
+  background: white;
+  color: black;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  margin: 70px 0;
+}
+
+.chatbar {
+  background: #46B3B3;
+  border-top: 1px solid black;
+  bottom: 0;
+  display: flex;
+  left: 0;
+  padding: 5px;
+  position: fixed;
+  right: 0;
+}
+
+.chatbar-message,
+.chatbar-username {
+  border: 1px solid black;
+  border-radius: 7px;
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  margin: 5px;
+  padding: 0 9px;
+}
+
+.chatbar-message {
+  flex: 8;
+}
+
+.chatbar-username {
+  flex: 2;
+}
+
+.message {
+  background-color: #B9DCBB;
+  display: flex;
+  padding: 5px;
+  border: 1px solid lightgrey;
+  border-radius: 6px;
+  box-shadow: 1px 2px 3px grey;
+  margin: 6px;
+}
+
+.message.system {
+  font-style: italic;
+  padding: 5px 20px;
+}
+
+.message-content,
+.message-username {
+  overflow: hidden;
+  margin: 5px;
+  padding: 0 10px;
+}
+
+.message-content {
+  flex: 8;
+}
+
+.message-username {
+  flex: 2;
+  font-weight: 700;
+}
+
+.navbar {
+  background: #46B3B3;
+  border-bottom: 1px solid #3F8E8E;
+  height: 60px;
+  left: 0;
+  padding: 0 10px;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.navbar-brand {
+  color: inherit;
+  display: block;
+  float: left;
+  font-weight: 700;
+  font-size: 28px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px 0 12px;
+  text-decoration: none;
+}
+
+.navbar > .logo{
+  float: left;
+  padding: 7.5px 0 7.5px 0;
+  height: 45px;
+  width: 45px;
 }
