@@ -48,7 +48,11 @@ body {
 }
 
 .message.system {
+  background-color: white;
+  border: none;
+  box-shadow: none;
   font-style: italic;
+  color: grey;
   padding: 5px 20px;
 }
 

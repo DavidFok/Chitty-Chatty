@@ -8,24 +8,28 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: 'Octocat'},
-      messages: []/*[{
+      messages: [{
         id: 1,
-        text: 'hi',
-        user: 'Octocat'
-      }]*/
+        type: 'system',
+        text: `someone's in trouble!!!`
+      }]
     };
   }
 
   newMessage(messageText, user) {
     const newMsgObj = {
       user: user,
-      text: messageText
+      text: messageText,
+      type: 'postMessage'
     };
-    // const newMessages = this.state.messages.concat(newMsgObj);
-    // this.setState({
-    //   currentUser: {name: user},
-    //   messages: newMessages
-    // });
+    if (user !== this.state.currentUser.name) {
+      let newPostNote = {
+        type:'postNotification',
+        text: `${this.state.currentUser.name} has changed their name to ${user}`
+      }
+      this.setState({ currentUser: {name: user} });
+      this.socket.send(JSON.stringify(newPostNote));
+    }
     this.socket.send(JSON.stringify(newMsgObj));
   }
 
@@ -39,6 +43,14 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let msg = JSON.parse(event.data);
       let messages = this.state.messages;
+      switch(msg.type) {
+        case "incomingMessage":
+          msg.type = 'user'
+          break;
+        case "incomingNotification":
+          msg.type = 'system';
+          break;
+      }
       messages.push(msg);
       this.setState({ messages: messages });
       console.log(this.state.messages);
