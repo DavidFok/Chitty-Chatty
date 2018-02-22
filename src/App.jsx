@@ -12,7 +12,8 @@ class App extends Component {
         id: 1,
         type: 'system',
         text: `someone's in trouble!!!`
-      }]
+      }],
+      userCount: 0
     };
   }
 
@@ -43,17 +44,22 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let msg = JSON.parse(event.data);
       let messages = this.state.messages;
-      switch(msg.type) {
-        case "incomingMessage":
-          msg.type = 'user'
-          break;
-        case "incomingNotification":
-          msg.type = 'system';
-          break;
+      if (msg.type === "usercount") {
+        this.setState( {userCount: msg.userCount} );
+        console.log("More users!!!");
+      } else {
+        switch(msg.type) {
+          case "incomingMessage":
+            msg.type = 'user'
+            break;
+          case "incomingNotification":
+            msg.type = 'system';
+            break;
+        }
+        messages.push(msg);
+        this.setState({ messages: messages });
+        console.log(this.state.messages);
       }
-      messages.push(msg);
-      this.setState({ messages: messages });
-      console.log(this.state.messages);
     }
 
     // setTimeout(() => {
@@ -70,7 +76,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar/>
+        <Navbar userCount={this.state.userCount}/>
         <MessageList messages={this.state.messages}/>
         <Chatbar newMessage={this.newMessage.bind(this)} currentUser={this.state.currentUser.name}/>
       </div>

@@ -64,7 +64,8 @@ body {
 }
 
 .message-content {
-  flex: 8;
+  flex: 6;
+  height: 16px;
 }
 
 .message-username {
@@ -95,9 +96,16 @@ body {
   text-decoration: none;
 }
 
-.navbar > .logo{
+.navbar > .logo {
   float: left;
   padding: 7.5px 0 7.5px 0;
   height: 45px;
   width: 45px;
+}
+
+.navbar > .user_count {
+  float: right;
+  font-size: 10px;
+  padding: 14px 0;
+  color: grey;
 }
