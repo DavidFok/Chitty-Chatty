@@ -5,7 +5,7 @@ class Navbar extends Component {
     return (
       <nav className="navbar">
         <img className="logo" src="bubble.png" />
-        <a href="/" className="navbar-brand">Chatty</a>
+        <a href="/" className="navbar-brand">Chitty Chatty</a>
         <p className="user_count">{this.props.userCount} users online</p>
       </nav>
     );

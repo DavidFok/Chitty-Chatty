@@ -15,6 +15,7 @@ class App extends Component {
       }],
       userCount: 0
     };
+    this.colors = ['#9BA2FF', '#2A3D45', '#FFD447', '#EF959D', '#550C18'];
   }
 
   newMessage(messageText, user) {
@@ -34,6 +35,61 @@ class App extends Component {
     this.socket.send(JSON.stringify(newMsgObj));
   }
 
+
+  assignColor(msg) {
+    const messages = this.state.messages;
+    const haveUserMsgs = messages.forEach((message) => {
+      if (message.type === 'user') {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    const haveUser = () => {
+      for (let message of messages) {
+        if (msg.userId === message.userId) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    //If we don't have this particular user before
+    if (!haveUser()) {
+      //Return a new color different from the last recorded user
+      if (haveUserMsgs) {
+        let newMsgColor = () => {
+          for (let i = messages.length; i <= 0; i--) {
+            if (messages[i].type === 'user') {
+              return  this.colors[indexOf(messages[i + 1].color) + 1];
+            }
+          }
+        }
+        if (newMsgColor === 'undefined') {
+          newMsgColor = '#9BA2FF';
+        }
+        return newMsgColor;
+      }
+      //Return a random color if we don't have any previous user messages
+      else {
+        return this.colors[Math.round(4 * Math.random())];
+      }
+    }
+
+    //If this user has posted a message before
+    else {
+      let msgColor = () => {
+        for (let message of messages) {
+          if (message.userId === msg.userId) {
+            return message.color;
+          }
+        }
+      }
+      return msgColor();
+    }
+  }
+
+
   componentDidMount() {
     console.log("componentDidMount \<App />");
     this.socket = new WebSocket(`ws:\//0.0.0.0:3001`);
@@ -46,19 +102,19 @@ class App extends Component {
       let messages = this.state.messages;
       if (msg.type === "usercount") {
         this.setState( {userCount: msg.userCount} );
-        console.log("More users!!!");
       } else {
         switch(msg.type) {
           case "incomingMessage":
-            msg.type = 'user'
+            msg.color = this.assignColor(msg);
+            msg.type = 'user';
             break;
           case "incomingNotification":
             msg.type = 'system';
             break;
         }
         messages.push(msg);
+        console.log(msg.color);
         this.setState({ messages: messages });
-        console.log(this.state.messages);
       }
     }
 
