@@ -38,14 +38,15 @@ class App extends Component {
 
   assignColor(msg) {
     const messages = this.state.messages;
-    const haveUserMsgs = messages.forEach((message) => {
-      if (message.type === 'user') {
-        return true;
-      } else {
-        return false;
+    let haveUserMsgs = () => {
+      for(let message of messages) {
+        if (message.type === 'user') {
+          return true;
+        }
       }
-    });
-    const haveUser = () => {
+      return false;
+    };
+    let haveUser = () => {
       for (let message of messages) {
         if (msg.userId === message.userId) {
           return true;
@@ -53,19 +54,20 @@ class App extends Component {
       }
       return false;
     }
-
     //If we don't have this particular user before
     if (!haveUser()) {
       //Return a new color different from the last recorded user
-      if (haveUserMsgs) {
+      if (haveUserMsgs()) {
         let newMsgColor = () => {
-          for (let i = messages.length; i <= 0; i--) {
+          for (let i = messages.length - 1; i >= 0; i--) {
             if (messages[i].type === 'user') {
-              return  this.colors[indexOf(messages[i + 1].color) + 1];
+              let idx = this.colors.indexOf(messages[i].color);
+              return  this.colors[idx + 1];
             }
           }
         }
-        if (newMsgColor === 'undefined') {
+        newMsgColor = newMsgColor();
+        if (newMsgColor === undefined) {
           newMsgColor = '#9BA2FF';
         }
         return newMsgColor;
@@ -75,7 +77,6 @@ class App extends Component {
         return this.colors[Math.round(4 * Math.random())];
       }
     }
-
     //If this user has posted a message before
     else {
       let msgColor = () => {
@@ -113,7 +114,6 @@ class App extends Component {
             break;
         }
         messages.push(msg);
-        console.log(msg.color);
         this.setState({ messages: messages });
       }
     }
