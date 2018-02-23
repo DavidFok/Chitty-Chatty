@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: ''},
+      currentUser: {name: 'Anonumouse'},
       messages: [{
         id: 1,
         type: 'system',
@@ -29,44 +29,46 @@ class App extends Component {
         type:'postNotification',
         text: `${this.state.currentUser.name} has changed their name to ${user}`
       }
-      this.setState({ currentUser: {name: user} });
+      let currentUserId = this.state.currentUser.userId;
+      this.setState({ currentUser: {name: user, userId: currentUserId} });
       this.socket.send(JSON.stringify(newPostNote));
     }
-    this.socket.send(JSON.stringify(newMsgObj));
+    if (newMsgObj.text) {
+      this.socket.send(JSON.stringify(newMsgObj));
+    }
   }
 
 
   assignColor(msg) {
     const messages = this.state.messages;
-    let haveUserMsgs = () => {
+    let haveUserMsgs = (() => {
       for(let message of messages) {
         if (message.type === 'user') {
           return true;
         }
       }
       return false;
-    };
-    let haveUser = () => {
+    })();
+    let haveUser = (() => {
       for (let message of messages) {
         if (msg.userId === message.userId) {
           return true;
         }
       }
       return false;
-    }
+    })();
     //If we don't have this particular user before
-    if (!haveUser()) {
+    if (!haveUser) {
       //Return a new color different from the last recorded user
-      if (haveUserMsgs()) {
-        let newMsgColor = () => {
+      if (haveUserMsgs) {
+        let newMsgColor = (() => {
           for (let i = messages.length - 1; i >= 0; i--) {
             if (messages[i].type === 'user') {
               let idx = this.colors.indexOf(messages[i].color);
               return  this.colors[idx + 1];
             }
           }
-        }
-        newMsgColor = newMsgColor();
+        })();
         if (newMsgColor === undefined) {
           newMsgColor = '#9BA2FF';
         }
@@ -79,14 +81,11 @@ class App extends Component {
     }
     //If this user has posted a message before
     else {
-      let msgColor = () => {
-        for (let message of messages) {
-          if (message.userId === msg.userId) {
-            return message.color;
-          }
+      for (let message of messages) {
+        if (message.userId === msg.userId) {
+          return message.color;
         }
       }
-      return msgColor();
     }
   }
 
@@ -103,6 +102,10 @@ class App extends Component {
       let messages = this.state.messages;
       if (msg.type === "usercount") {
         this.setState( {userCount: msg.userCount} );
+      } else if (msg.type === "userid") {
+        let currentUser = this.state.currentUser.name;
+        let newCurrentUser = {name: currentUser, userId: msg.userId};
+        this.setState( {currentUser: newCurrentUser});
       } else {
         switch(msg.type) {
           case "incomingMessage":
@@ -133,7 +136,7 @@ class App extends Component {
     return (
       <div>
         <Navbar userCount={this.state.userCount}/>
-        <MessageList messages={this.state.messages}/>
+        <MessageList messages={this.state.messages} currentUser={this.state.currentUser}/>
         <Chatbar newMessage={this.newMessage.bind(this)} currentUser={this.state.currentUser.name}/>
       </div>
     );

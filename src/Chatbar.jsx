@@ -17,6 +17,12 @@ class Chatbar extends Component {
     this.setState({userText: event.target.value});
   }
 
+  onUserNameKeyPress(event) {
+    if (event.key === 'Enter') {
+      this.props.newMessage(null, this.state.userText);
+    }
+  }
+
   onMessageKeyPress(event) {
     //Adds "Anonymous" user to message if no User is submitted
     let userTxt = () => {
@@ -42,7 +48,8 @@ class Chatbar extends Component {
           value={this.state.userText}
           onChange={this.onUserTextChg.bind(this)}
           className="chatbar-username"
-          placeholder="Name (Optional)" />
+          placeholder="Name (Optional)"
+          onKeyPress={this.onUserNameKeyPress.bind(this)}/>
         <input
           value={this.state.messageText}
           onChange={this.onMessageTextChange.bind(this)}

@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
 
 class MessageList extends Component {
-  render() {
-    const messages = this.props.messages.map((message) => {
+  constructor(props) {
+    super(props);
+  }
+
+  separate(message) {
+    if (message.userId === this.props.currentUser.userId) {
+      return "message message-right";
+    } else {
+      return "message message-left";
+    }
+  }
+
+  messages() {
+    let messages = this.props.messages.map((message) => {
       if (message.type === 'user') {
         let fontColor = {color: message.color};
         return (
-          <div key={message.id} className="message">
+          <div key={message.id} className={this.separate(message)}>
             <span className="message-username" style={fontColor}>{message.user}</span>
             <span className="message-content">{message.text}</span>
           </div>
@@ -15,13 +27,17 @@ class MessageList extends Component {
         return (
           <div key={message.id} className='message system'>
             {message.text}
-          </div>);
+          </div>
+        );
       }
-    });
+    })
+    return messages;
+  }
 
+  render() {
     return (
       <div className="messages">
-        {messages}
+        {this.messages()}
       </div>
     );
   }
