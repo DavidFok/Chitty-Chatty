@@ -24,6 +24,8 @@ class App extends Component {
       text: messageText,
       type: 'postMessage'
     };
+
+    //send an extra message to the server if the user changes their username
     if (user !== this.state.currentUser.name) {
       let newPostNote = {
         type:'postNotification',
@@ -33,6 +35,7 @@ class App extends Component {
       this.setState({ currentUser: {name: user, userId: currentUserId} });
       this.socket.send(JSON.stringify(newPostNote));
     }
+
     if (newMsgObj.text) {
       this.socket.send(JSON.stringify(newMsgObj));
     }
@@ -86,8 +89,6 @@ class App extends Component {
       else {
         return this.colors[Math.round(4 * Math.random())];
       }
-
-
     }
 
     //If this user has posted a message before
@@ -111,25 +112,28 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let msg = JSON.parse(event.data);
       let messages = this.state.messages;
-      if (msg.type === "usercount") {
-        this.setState( {userCount: msg.userCount} );
-      } else if (msg.type === "userid") {
-        let currentUser = this.state.currentUser.name;
-        let newCurrentUser = {name: currentUser, userId: msg.userId};
-        this.setState( {currentUser: newCurrentUser});
-      } else {
-        switch(msg.type) {
-          case "incomingMessage":
-            msg.color = this.assignColor(msg);
-            msg.type = 'user';
-            break;
-          case "incomingNotification":
-            msg.type = 'system';
-            break;
+
+      //process messages from the server
+      switch(msg.type) {
+        // receives server allocated user is # for permanent storage
+        case "userid":
+          let currentUser = this.state.currentUser.name;
+          let newCurrentUser = {name: currentUser, userId: msg.userId};
+          this.setState( {currentUser: newCurrentUser});
+          break;
+        case "usercount":
+          this.setState( {userCount: msg.userCount} );
+          break;
+        case "incomingMessage":
+          msg.color = this.assignColor(msg);
+          msg.type = 'user';
+          break;
+        case "incomingNotification":
+          msg.type = 'system';
+          break;
         }
-        messages.push(msg);
-        this.setState({ messages: messages });
-      }
+      messages.push(msg);
+      this.setState({ messages: messages });
     }
   }
 
