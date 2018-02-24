@@ -41,6 +41,8 @@ class App extends Component {
 
   assignColor(msg) {
     const messages = this.state.messages;
+
+    // check if there are user messages in state.messages
     let haveUserMsgs = (() => {
       for(let message of messages) {
         if (message.type === 'user') {
@@ -49,6 +51,8 @@ class App extends Component {
       }
       return false;
     })();
+
+    // check if this client has received a message from this particular user before
     let haveUser = (() => {
       for (let message of messages) {
         if (msg.userId === message.userId) {
@@ -57,8 +61,11 @@ class App extends Component {
       }
       return false;
     })();
+
+
     //If we don't have this particular user before
     if (!haveUser) {
+
       //Return a new color different from the last recorded user
       if (haveUserMsgs) {
         let newMsgColor = (() => {
@@ -74,11 +81,15 @@ class App extends Component {
         }
         return newMsgColor;
       }
+
       //Return a random color if we don't have any previous user messages
       else {
         return this.colors[Math.round(4 * Math.random())];
       }
+
+
     }
+
     //If this user has posted a message before
     else {
       for (let message of messages) {
@@ -120,16 +131,6 @@ class App extends Component {
         this.setState({ messages: messages });
       }
     }
-
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   // Add a new message to the list of messages in the data store
-    //   const newMessage = {id: 3, type: 'user', user: "Michelle", text: "Hello there!"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    // }, 3000);
   }
 
   render() {
