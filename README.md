@@ -1,45 +1,57 @@
-React Boilerplate
+Chitty Chatty
 =====================
 
-A minimal and light dev environment for ReactJS.
+A real-time multi-user messaging app built with ReactJS using WebSockets.
 
-### Usage
 
-Clone the boilerplate and create your own git repo.
+## Features
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+* Messages are sent by typing into the chatbar and pressing Enter.
 
-Install the dependencies and start the server.
+* Username can be changed by typing a new username into the namebar and pressing enter. Defaults to "Anonumouse".
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+* When a username is changed, a system message will be sent to all online users in the chatroom.
 
-### Static Files
+* Display of users currently online in the chatroom
 
-You can store static files like images, fonts, etc in the `build` folder.
+* Usernames are randomly assigned a colour, so that their name will appear in a color within their messages to help differentiate user messages
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
+* Self-posted messages will appear on the right-side of the message list, and messages from other users will appear on the left-side.
 
-### Linting
 
-This boilerplate project includes React ESLint configuration.
+## Getting Started
 
-```
-npm run lint
-```
+1. Clone his repo to your local machine.
 
-### Dependencies
+2. Install the dependencies by entering ```npm i``` in the CLI.
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+3. Start the http server with ```npm start```
+
+4. Concurrently start the websocket server within the ```chatty-server``` folder using the ```node server.js``` command.
+
+5. View the website at ```http://locathost:3000``` in the browser.
+
+6. Open multiple users by opening multiple tabs within the browser and visiting the website at ```http://locathost:3000```
+
+
+## Dependencies
+
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* babel-preset-stage-0
+* css-loader
+* node-sass
+* react
+* react-dom
+* sass-loader
+* sockjs-client
+* style-loader
+* webpack
+* webpack-dev-server
+
+Chatty_Server
+
+* express
+* ws
