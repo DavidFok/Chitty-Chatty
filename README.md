@@ -18,6 +18,8 @@ A real-time multi-user messaging app built with ReactJS using WebSockets.
 
 * Self-posted messages will appear on the right-side of the message list, and messages from other users will appear on the left-side.
 
+![alt text](docs/Screenshot-01.png "Landing page")
+![alt text](docs/Screenshot-02.png "Landing page")
 
 ## Getting Started
 
