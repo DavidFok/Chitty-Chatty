@@ -8,9 +8,9 @@ class MessageList extends Component {
   //Detemines message placement (left or right) in the messageList
   separate(message) {
     if (message.userId === this.props.currentUser.userId) {
-      return "message message-right";
+      return 'message message-right';
     } else {
-      return "message message-left";
+      return 'message message-left';
     }
   }
 

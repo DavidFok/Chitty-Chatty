@@ -27,7 +27,7 @@ class Chatbar extends Component {
     //Adds "Anonymous" user to message if no User is submitted
     let userTxt = () => {
       if (this.state.userText === '') {
-        return "Anonumouse";
+        return 'Anonumouse';
       }
       return this.state.userText;
     }

@@ -11,7 +11,7 @@ class App extends Component {
       messages: [{
         id: 1,
         type: 'system',
-        text: `someone's in trouble!`
+        text: "someone's in trouble!"
       }],
       userCount: 0
     };
@@ -103,9 +103,8 @@ class App extends Component {
 
 
   componentDidMount() {
-    console.log("componentDidMount \<App />");
-    this.socket = new WebSocket(`ws:\//0.0.0.0:3001`);
-    this.socket.onopen = function (event) {
+    this.socket = new WebSocket('ws://0.0.0.0:3001');
+    this.socket.onopen = function () {
       console.log('Connected to server');
     };
 
@@ -116,19 +115,19 @@ class App extends Component {
       //process messages from the server
       switch(msg.type) {
         // receives server allocated user is # for permanent storage
-        case "userid":
+        case 'userid':
           let currentUser = this.state.currentUser.name;
           let newCurrentUser = {name: currentUser, userId: msg.userId};
           this.setState( {currentUser: newCurrentUser});
           break;
-        case "usercount":
+        case 'usercount':
           this.setState( {userCount: msg.userCount} );
           break;
-        case "incomingMessage":
+        case 'incomingMessage':
           msg.color = this.assignColor(msg);
           msg.type = 'user';
           break;
-        case "incomingNotification":
+        case 'incomingNotification':
           msg.type = 'system';
           break;
         }
